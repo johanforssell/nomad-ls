@@ -79,7 +79,7 @@ func TestSimpleParse(t *testing.T) {
 func TestBasicBlockCollect(t *testing.T) {
 	parser := hclparse.NewParser()
 
-	file, err := os.ReadFile("../../loki.nomad.hcl")
+	file, err := os.ReadFile("./testdata/loki.nomad.hcl")
 	if err != nil {
 		panic(err)
 	}
@@ -88,15 +88,15 @@ func TestBasicBlockCollect(t *testing.T) {
 
 	hclFile := parser.Files()["loki"]
 
-	pos := protocol.Position{Line: 7, Character: 0}
+	pos := protocol.Position{Line: 71, Character: 7}
 
 	predictedCount := CalculateByteOffset(pos, hclFile.Bytes)
 
 	blocks := CollectBlockTypes(hclFile.Body, hcl.Pos{
-		Line:   7,
-		Column: 0,
+		Line:   int(pos.Line),
+		Column: int(pos.Character),
 		Byte:   int(predictedCount),
-	}, schema.SchemaMap)
+	}, schema.SchemaMapBetter)
 
 	t.Logf("blocks: %v", blocks)
 
