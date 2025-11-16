@@ -50,6 +50,9 @@ func (s *Service) Handle(ctx context.Context, reply jsonrpc2.Replier, req jsonrp
 			Capabilities: protocol.ServerCapabilities{
 				CompletionProvider: &protocol.CompletionOptions{},
 				HoverProvider:      &protocol.HoverOptions{},
+				TextDocumentSync: &protocol.TextDocumentSyncOptions{
+					Change: protocol.TextDocumentSyncKindFull,
+				},
 			},
 		}, nil)
 	case protocol.MethodTextDocumentHover:
