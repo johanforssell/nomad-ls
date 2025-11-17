@@ -67,6 +67,8 @@ func main() {
 
 	con.Go(context.Background(), func(ctx context.Context, reply jsonrpc2.Replier, req jsonrpc2.Request) error {
 		go func() {
+			logger.Info(fmt.Sprintf("recieved method: %s", req.Method()))
+
 			if req.Method() == protocol.MethodInitialize {
 				logger.Info("initialized")
 			} else if req.Method() == protocol.MethodTextDocumentHover {
