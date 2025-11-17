@@ -98,19 +98,6 @@ func (rwc *rwc) Close() error {
 	return rwc.w.Close()
 }
 
-// type State struct {
-// 	context context.Context
-// 	paths []lang.Path
-// }
-
-// func (s *State) Paths(ctx context.Context) []lang.Path {
-// 		return s.paths
-// }
-
-// func (s *State) PathContext(path lang.Path) (*decoder.PathContext, error) {
-
-// }
-
 func isBuilt() bool {
 	entrypoint := string(os.Args[0])
 
