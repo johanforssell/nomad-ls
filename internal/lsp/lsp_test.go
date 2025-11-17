@@ -45,7 +45,7 @@ func TestSimpleParse(t *testing.T) {
 
 	body := parser.Files()["loki"].Body
 
-	bc, _ := body.Content(schema.JobConfigSchema)
+	bc, _ := body.Content(schema.SchemaMapBetter["root"])
 	// t.Logf("%+v", bc.Blocks.ByType())
 	// t.Logf("ed: %+v", bc)
 
@@ -55,22 +55,16 @@ func TestSimpleParse(t *testing.T) {
 	t.Logf("body range: %d:%d to %d:%d", x.SrcRange.Start.Line, x.SrcRange.Start.Column, x.SrcRange.End.Line, x.SrcRange.End.Column)
 
 	block := bc.Blocks[2]
-	bc, _ = block.Body.Content(schema.JobSchema)
+	bc, _ = block.Body.Content(schema.SchemaMapBetter["job"])
 	// t.Logf("%+v", bc.Blocks.ByType())
 	// t.Logf("ed: %#v", bc)
 	t.Logf("job block: %#v", block.DefRange)
 
 	block = bc.Blocks[0]
-	bc, _ = block.Body.Content(schema.JobGroupSchema)
+	bc, _ = block.Body.Content(schema.SchemaMapBetter["group"])
 	// t.Logf("%+v", bc.Blocks.ByType())
 	// t.Logf("ed: %#v", bc)
 	t.Logf("group block: %#v", block.DefRange)
-
-	block = bc.Blocks[0]
-	bc, _ = block.Body.Content(schema.JobGroupEphemeralDiskSchema)
-	// t.Logf("%+v", bc.Blocks.ByType())
-	// t.Logf("ed: %#v", bc)
-	t.Logf("ed block: %#v", block.DefRange)
 
 	// t.Logf("%+v", attr)
 	// t.Logf("blocks: %v", blocks)
