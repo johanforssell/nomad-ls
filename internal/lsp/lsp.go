@@ -253,20 +253,17 @@ func CalculateByteOffset(pos protocol.Position, src []byte) uint {
 	var line uint
 	var bytesCount uint
 
-	for line < uint(pos.Line) {
-		fmt.Println("line")
+	for line < uint(pos.Line) && runeIndex < uint(len(runes)) {
 		if runes[runeIndex] == '\n' {
 			line += 1
 		}
-		fmt.Println(runeIndex)
 		bytesCount += uint(utf8.RuneLen(runes[runeIndex]))
 		runeIndex += 1
 	}
 
 	var j uint
 
-	for j < uint(pos.Character) {
-		fmt.Println("char")
+	for j < uint(pos.Character) && runeIndex < uint(len(runes)) {
 		bytesCount += uint(utf8.RuneLen(runes[runeIndex]))
 		runeIndex += 1
 		j += 1
