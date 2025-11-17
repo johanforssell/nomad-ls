@@ -8,14 +8,11 @@ import (
 	"os"
 	"strings"
 
-	// "github.com/hashicorp/hcl/v2/hcled"
-
+	"github.com/hashicorp/hcl/v2"
 	"github.com/hashicorp/hcl/v2/hclparse"
 	"github.com/lmittmann/tint"
 	"github.com/loczek/nomad-ls/internal/lsp"
-	"github.com/loczek/nomad-ls/internal/schema"
 	"go.lsp.dev/jsonrpc2"
-	"go.lsp.dev/protocol"
 )
 
 func main() {
@@ -43,16 +40,16 @@ func main() {
 	parser.ParseHCL(file, "loki")
 
 	body := parser.Files()["loki"].Body
-	file_bytes := parser.Files()["loki"].Bytes
+	// file_bytes := parser.Files()["loki"].Bytes
+	// logger.Info(fmt.Sprintf(string(file_bytes)))
 
-	content, err := body.Content(schema.JobConfigSchema)
+	logger.Info(fmt.Sprintf("body before: %#v", body))
+	content, body, err := body.PartialContent(&hcl.BodySchema{})
 	if err.Error() != "no diagnostics" {
 		panic(err)
 	}
-
-	logger.Info(fmt.Sprintf(string(file_bytes)))
-	logger.Info(fmt.Sprintf("%#v", body))
-	logger.Info(fmt.Sprintf("%#v", content))
+	logger.Info(fmt.Sprintf("body after: %#v", body))
+	logger.Info(fmt.Sprintf("body content: %#v", content))
 
 	for _, block := range content.Blocks {
 		logger.Info(fmt.Sprintf("block: %#v", block))
