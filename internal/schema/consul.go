@@ -15,7 +15,7 @@ var ConsulSchema = &schema.BodySchema{
 			},
 		},
 		"namespace": {
-			Description: lang.Markdown("The Consul namespace in which group and task-level services within the group will be registered. Use of `template` to access Consul KV will read from the specified Consul namespace. Specifying `namespace` takes precedence over the [`-consul-namespace`](/nomad/commands/job/run#consul-namespace) command line argument in `job run`. In Nomad Community Edition, this field is ignored."),
+			Description: lang.Markdown("The Consul namespace in which group and task-level services within the group will be registered. Use of `template` to access Consul KV will read from the specified Consul namespace. Specifying `namespace` takes precedence over the [`-consul-namespace`](https://developer.hashicorp.com/nomad/commands/job/run#consul-namespace) command line argument in `job run`. In Nomad Community Edition, this field is ignored."),
 			DefaultValue: &schema.DefaultValue{
 				Value: cty.StringVal(""),
 			},

@@ -47,7 +47,7 @@ var TaskSchema = &schema.BodySchema{
 			},
 		},
 		"shutdown_delay": {
-			Description: lang.Markdown("Specifies the duration to wait when killing a task between removing its service registrations from Consul or Nomad, and sending it a shutdown signal. Ideally services would fail health checks once they receive a shutdown signal. Alternatively, `shutdown_delay` may be set to give in flight requests time to complete before shutting down. This `shutdown_delay` only applies to services defined at the task level by the [`service`](/nomad/docs/job-specification/task#service) block. In addition, task groups have their own [`shutdown_delay`](/nomad/docs/job-specification/group#shutdown_delay) which waits between de-registering group services and stopping tasks."),
+			Description: lang.Markdown("Specifies the duration to wait when killing a task between removing its service registrations from Consul or Nomad, and sending it a shutdown signal. Ideally services would fail health checks once they receive a shutdown signal. Alternatively, `shutdown_delay` may be set to give in flight requests time to complete before shutting down. This `shutdown_delay` only applies to services defined at the task level by the [`service`](https://developer.hashicorp.com/nomad/docs/job-specification/task#service) block. In addition, task groups have their own [`shutdown_delay`](https://developer.hashicorp.com/nomad/docs/job-specification/group#shutdown_delay) which waits between de-registering group services and stopping tasks."),
 			DefaultValue: &schema.DefaultValue{
 				Value: cty.StringVal(
 					"0s",
@@ -55,7 +55,7 @@ var TaskSchema = &schema.BodySchema{
 			},
 		},
 		"user": {
-			Description: lang.Markdown("Specifies the user that will run the task. Defaults to `nobody` for the [`exec`](/nomad/docs/job-declare/task-driver/exec) and [`java`](/nomad/docs/job-declare/task-driver/java) drivers. [Docker](/nomad/docs/job-declare/task-driver/docker) images specify their own default users. Clients can restrict [which drivers](/nomad/docs/configuration/client#user-checked_drivers) are allowed to run tasks as [certain users](/nomad/docs/configuration/client#user-denylist). On UNIX-like systems, setting `user` also affects the environment variables `HOME`, `USER`, and `LOGNAME` available to the task. On Windows, when Nomad is running as a [system service](/nomad/docs/job-specification/service) for the [`raw_exec`](/nomad/docs/job-declare/task-driver/raw_exec) driver, you may specify a less-privileged service user. For example, `NT AUTHORITY\\LocalService`, `NT AUTHORITY\\NetworkService`."),
+			Description: lang.Markdown("Specifies the user that will run the task. Defaults to `nobody` for the [`exec`](https://developer.hashicorp.com/nomad/docs/job-declare/task-driver/exec) and [`java`](https://developer.hashicorp.com/nomad/docs/job-declare/task-driver/java) drivers. [Docker](https://developer.hashicorp.com/nomad/docs/job-declare/task-driver/docker) images specify their own default users. Clients can restrict [which drivers](https://developer.hashicorp.com/nomad/docs/configuration/client#user-checked_drivers) are allowed to run tasks as [certain users](https://developer.hashicorp.com/nomad/docs/configuration/client#user-denylist). On UNIX-like systems, setting `user` also affects the environment variables `HOME`, `USER`, and `LOGNAME` available to the task. On Windows, when Nomad is running as a [system service](https://developer.hashicorp.com/nomad/docs/job-specification/service) for the [`raw_exec`](https://developer.hashicorp.com/nomad/docs/job-declare/task-driver/raw_exec) driver, you may specify a less-privileged service user. For example, `NT AUTHORITY\\LocalService`, `NT AUTHORITY\\NetworkService`."),
 			DefaultValue: &schema.DefaultValue{
 				Value: cty.StringVal(
 					"",
@@ -97,7 +97,7 @@ var TaskSchema = &schema.BodySchema{
 			Body:        EnvSchema,
 		},
 		"identity": {
-			Description: lang.PlainText("Expose [Workload Identity](/nomad/docs/concepts/workload-identity) to the task."),
+			Description: lang.PlainText("Expose [Workload Identity](https://developer.hashicorp.com/nomad/docs/concepts/workload-identity) to the task."),
 			Body:        IdentitySchema,
 		},
 		"lifecycle": {

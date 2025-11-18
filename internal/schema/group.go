@@ -9,7 +9,7 @@ import (
 var GroupSchema = &schema.BodySchema{
 	Attributes: map[string]*schema.AttributeSchema{
 		"count": {
-			Description: lang.Markdown("Specifies the number of instances that should be running under for this group. This value must be non-negative. This defaults to the `min` value specified in the [`scaling`](/nomad/docs/job-specification/scaling) block, if present; otherwise, this defaults to `1`."),
+			Description: lang.Markdown("Specifies the number of instances that should be running under for this group. This value must be non-negative. This defaults to the `min` value specified in the [`scaling`](https://developer.hashicorp.com/nomad/docs/job-specification/scaling) block, if present; otherwise, this defaults to `1`."),
 			DefaultValue: &schema.DefaultValue{
 				Value: cty.NumberIntVal(1),
 			},

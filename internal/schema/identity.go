@@ -47,7 +47,7 @@ var IdentitySchema = &schema.BodySchema{
 			},
 		},
 		"filepath": {
-			Description: lang.Markdown("If not empty and file is `true`, the workload identity is available at the specified location relative to the [task working directory](/nomad/docs/reference/runtime-environment-settings#task-directories) instead of the `NOMAD_SECRETS_DIR`.\"30s\" or \"1h\". You may not set a TTL on the default identity. You should always set a TTL for non-default identities.\"30s\" or \"1h\". You may not set a TTL on the default identity. You should always set a TTL for non-default identities."),
+			Description: lang.Markdown("If not empty and file is `true`, the workload identity is available at the specified location relative to the [task working directory](https://developer.hashicorp.com/nomad/docs/reference/runtime-environment-settings#task-directories) instead of the `NOMAD_SECRETS_DIR`.\"30s\" or \"1h\". You may not set a TTL on the default identity. You should always set a TTL for non-default identities.\"30s\" or \"1h\". You may not set a TTL on the default identity. You should always set a TTL for non-default identities."),
 			DefaultValue: &schema.DefaultValue{
 				Value: cty.StringVal(""),
 			},

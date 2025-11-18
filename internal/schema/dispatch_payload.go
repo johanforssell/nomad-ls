@@ -9,7 +9,7 @@ import (
 var DispatchPayloadSchema = &schema.BodySchema{
 	Attributes: map[string]*schema.AttributeSchema{
 		"file": {
-			Description: lang.Markdown("Specifies the file name to write the content of dispatch payload to. The file is written relative to the [task's local directory](/nomad/docs/reference/runtime-environment-settings#local)."),
+			Description: lang.Markdown("Specifies the file name to write the content of dispatch payload to. The file is written relative to the [task's local directory](https://developer.hashicorp.com/nomad/docs/reference/runtime-environment-settings#local)."),
 			DefaultValue: &schema.DefaultValue{
 				Value: cty.StringVal(""),
 			},
