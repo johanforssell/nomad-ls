@@ -24,9 +24,11 @@ var GroupSchema = &schema.BodySchema{
 	Blocks: map[string]*schema.BlockSchema{
 		"constraint": {
 			Description: lang.PlainText("This can be provided multiple times to define additional constraints."),
+			Body:        ConstraintSchema,
 		},
 		"affinity": {
 			Description: lang.PlainText("This can be provided multiple times to define preferred placement criteria."),
+			Body:        AffinitySchema,
 		},
 		"spread": {
 			Description: lang.Markdown("This can be provided multiple times to define criteria for spreading allocations across a node attribute or metadata. See the [Nomad spread reference](https://developer.hashicorp.com/nomad/docs/job-specification/spread) for more details."),
@@ -34,6 +36,7 @@ var GroupSchema = &schema.BodySchema{
 		},
 		"consul": {
 			Description: lang.Markdown("Specifies Consul configuration options specific to the group. These options will be applied to all tasks and services in the group unless a task has its own `consul` block."),
+			Body:        ConsulSchema,
 		},
 		"ephemeral_disk": {
 			Description: lang.PlainText("Specifies the ephemeral disk requirements of the group. Ephemeral disks can be marked as sticky and support live data migrations."),
@@ -43,6 +46,7 @@ var GroupSchema = &schema.BodySchema{
 		},
 		"meta": {
 			Description: lang.PlainText("Specifies a key-value map that annotates the group with user-defined metadata."),
+			Body:        MetaSchema,
 		},
 		"migrate": {
 			Description: lang.PlainText("Specifies the group strategy for migrating off of draining nodes. Only service jobs with a count greater than 1 support migrate blocks."),

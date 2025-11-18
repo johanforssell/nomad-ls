@@ -19,13 +19,25 @@ const (
 )
 
 var SchemaMapBetter map[string]*hcl.BodySchema = map[string]*hcl.BodySchema{
-	"root":  RootBodySchema.Copy().ToHCLSchema(),
-	"job":   JobSchemaBetter.Copy().ToHCLSchema(),
-	"group": GroupSchema.Copy().ToHCLSchema(),
-	// "ephemeral_disk": ephemera,
-	"spread": SpreadSchema.Copy().ToHCLSchema(),
-	"target": TargetSchema.Copy().ToHCLSchema(),
-	"update": UpdateSchema.Copy().ToHCLSchema(),
+	"root": RootBodySchema.Copy().ToHCLSchema(),
+
+	"affinity":         AffinitySchema.Copy().ToHCLSchema(),
+	"artifact":         ArtifactSchema.Copy().ToHCLSchema(),
+	"constraint":       ConstraintSchema.Copy().ToHCLSchema(),
+	"consul":           ConsulSchema.Copy().ToHCLSchema(),
+	"dispatch_payload": DispatchPayloadSchema.Copy().ToHCLSchema(),
+	"env":              EnvSchema.Copy().ToHCLSchema(),
+	"group":            GroupSchema.Copy().ToHCLSchema(),
+	"identity":         IdentitySchema.Copy().ToHCLSchema(),
+	"job":              JobSchemaBetter.Copy().ToHCLSchema(),
+	"lifecycle":        LifecycleSchema.Copy().ToHCLSchema(),
+	"logs":             LogsSchema.Copy().ToHCLSchema(),
+	"meta":             MetaSchema.Copy().ToHCLSchema(),
+	"resources":        ResourcesSchema.Copy().ToHCLSchema(),
+	"spread":           SpreadSchema.Copy().ToHCLSchema(),
+	"taks":             TaskSchema.Copy().ToHCLSchema(),
+	"target":           TargetSchema.Copy().ToHCLSchema(),
+	"update":           UpdateSchema.Copy().ToHCLSchema(),
 }
 
 var RootBodySchema = schema.BodySchema{

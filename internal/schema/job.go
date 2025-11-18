@@ -47,7 +47,7 @@ var JobSchemaBetter = &schema.BodySchema{
 			},
 		},
 		"type": {
-			Description: lang.PlainText("Specifies the Nomad scheduler to use. Nomad provides the service, `system`, `batch`, and `sysbatch` schedulers."),
+			Description: lang.PlainText("Specifies the Nomad scheduler to use. Nomad provides the `service`, `system`, `batch`, and `sysbatch` schedulers."),
 			DefaultValue: &schema.DefaultValue{
 				Value: cty.StringVal("service"),
 			},
@@ -72,9 +72,11 @@ var JobSchemaBetter = &schema.BodySchema{
 	Blocks: map[string]*schema.BlockSchema{
 		"constraint": {
 			Description: lang.Markdown("This can be provided multiple times to define additional constraints. See the [Nomad constraint reference](https://developer.hashicorp.com/nomad/docs/job-specification/constraint) for more details."),
+			Body:        ConstraintSchema,
 		},
 		"affinity": {
 			Description: lang.Markdown("This can be provided multiple times to define preferred placement criteria. See the [Nomad affinity reference](https://developer.hashicorp.com/nomad/docs/job-specification/affinity) for more details."),
+			Body:        AffinitySchema,
 		},
 		"spread": {
 			Description: lang.PlainText("This can be provided multiple times to define criteria for spreading allocations across a node attribute or metadata. See the [Nomad spread reference](https://developer.hashicorp.com/nomad/docs/job-specification/spread) for more details."),
@@ -90,9 +92,9 @@ var JobSchemaBetter = &schema.BodySchema{
 				},
 			},
 		},
-		// TODO: should it be a block?
 		"meta": {
 			Description: lang.PlainText("Specifies a key-value map that annotates with user-defined metadata."),
+			Body:        MetaSchema,
 		},
 		"migrate": {
 			Description: lang.PlainText("Specifies the groups strategy for migrating off of draining nodes. If omitted, a default migration strategy is applied. Only service jobs with a count greater than 1 support migrate blocks."),
