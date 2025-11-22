@@ -187,7 +187,7 @@ func dfs2(body hcl.Body, blocks *[]protocol.CompletionItem, schemaMap map[string
 	if matchingBlocks == 0 {
 		var blocksByTypeArr []protocol.CompletionItem
 
-		for k := range blocksByType {
+		for k := range langSchema.Blocks {
 			blocksByTypeArr = append(blocksByTypeArr, protocol.CompletionItem{
 				Label:      k,
 				InsertText: asAnonymousBlock(k),
