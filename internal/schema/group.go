@@ -40,6 +40,7 @@ var GroupSchema = &schema.BodySchema{
 		},
 		"ephemeral_disk": {
 			Description: lang.PlainText("Specifies the ephemeral disk requirements of the group. Ephemeral disks can be marked as sticky and support live data migrations."),
+			Body:        EphemeralDiskSchema,
 		},
 		"disconnect": {
 			Description: lang.PlainText("Specifies the disconnect strategy for the server and client for all tasks in this group in case of a network partition. The tasks can be left unconnected, stopped or replaced when the client disconnects. The policy for reconciliation in case the client regains connectivity is also specified here."),
@@ -58,9 +59,11 @@ var GroupSchema = &schema.BodySchema{
 		},
 		"reschedule": {
 			Description: lang.PlainText("Allows to specify a rescheduling strategy. Nomad will then attempt to schedule the task on another node if any of the group allocation statuses become \"failed\"."),
+			Body:        RescheduleSchema,
 		},
 		"restart": {
 			Description: lang.PlainText("Specifies the restart policy for all tasks in this group. If omitted, a default policy exists for each job type, which can be found in the [restart block documentation](https://developer.hashicorp.com/nomad/docs/job-specification/restart)."),
+			Body:        RestartSchema,
 		},
 		"service": {
 			Description: lang.Markdown("Specifies integrations with Nomad or [Consul](https://developer.hashicorp.com/nomad/docs/configuration/consul) for service discovery. Nomad automatically registers each service when an allocation is started and de-registers them when the allocation is destroyed."),
@@ -76,12 +79,14 @@ var GroupSchema = &schema.BodySchema{
 		},
 		"update": {
 			Description: lang.PlainText("Specifies the task's update strategy. When omitted, a default update strategy is applied."),
+			Body:        UpdateSchema,
 		},
 		"vault": {
 			Description: lang.PlainText("Specifies the set of Vault policies required by all tasks in this group. Overrides a `vault` block set at the `job` level."),
 		},
 		"volume": {
 			Description: lang.PlainText("Specifies the volumes that are required by tasks within the group."),
+			Body:        VolumeSchema,
 		},
 	},
 }

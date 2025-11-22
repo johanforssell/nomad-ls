@@ -102,15 +102,19 @@ var JobSchemaBetter = &schema.BodySchema{
 		},
 		"parameterized": {
 			Description: lang.PlainText("Specifies the job as a parameterized job such that it can be dispatched against."),
+			Body:        ParameterizedSchema,
 		},
 		"periodic": {
 			Description: lang.PlainText("Allows the job to be scheduled at fixed times, dates or intervals."),
+			Body:        PeriodicSchema,
 		},
 		"reschedule": {
 			Description: lang.PlainText("Allows to specify a rescheduling strategy. Nomad will then attempt to schedule the task on another node if any of its allocation statuses become \"failed\"."),
+			Body:        RescheduleSchema,
 		},
 		"update": {
 			Description: lang.PlainText("Specifies the task's update strategy. When omitted, a default update strategy is applied."),
+			Body:        UpdateSchema,
 		},
 		"vault": {
 			Description: lang.PlainText("Specifies the set of Vault policies required by all tasks in this job."),
