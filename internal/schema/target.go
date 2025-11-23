@@ -13,12 +13,14 @@ var TargetSchema = &schema.BodySchema{
 			DefaultValue: &schema.DefaultValue{
 				Value: cty.StringVal(""),
 			},
+			Constraint: &schema.LiteralType{Type: cty.String},
 		},
 		"percent": {
 			Description: lang.PlainText("Specifies the percentage associated with the target value."),
 			DefaultValue: &schema.DefaultValue{
 				Value: cty.NumberIntVal(0),
 			},
+			Constraint: &schema.LiteralType{Type: cty.Number},
 		},
 	},
 }

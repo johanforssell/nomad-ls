@@ -13,6 +13,7 @@ var DispatchPayloadSchema = &schema.BodySchema{
 			DefaultValue: &schema.DefaultValue{
 				Value: cty.StringVal(""),
 			},
+			Constraint: &schema.LiteralType{Type: cty.String},
 		},
 	},
 }

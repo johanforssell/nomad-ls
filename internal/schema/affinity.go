@@ -13,6 +13,7 @@ var AffinitySchema = &schema.BodySchema{
 			DefaultValue: &schema.DefaultValue{
 				Value: cty.StringVal(""),
 			},
+			Constraint: &schema.LiteralType{Type: cty.String},
 		},
 		// TODO: update docs
 		"operator": {
@@ -20,12 +21,14 @@ var AffinitySchema = &schema.BodySchema{
 			DefaultValue: &schema.DefaultValue{
 				Value: cty.StringVal("="),
 			},
+			Constraint: &schema.LiteralType{Type: cty.String},
 		},
 		"value": {
 			Description: lang.Markdown("Specifies the value to compare the attribute against using the specified operation. This can be a literal value, another attribute, or any [Nomad interpolated values](https://developer.hashicorp.com/nomad/docs/reference/runtime-variable-interpolation#interpreted_node_vars). The `value` field is required."),
 			DefaultValue: &schema.DefaultValue{
 				Value: cty.StringVal(""),
 			},
+			Constraint: &schema.LiteralType{Type: cty.String},
 			IsRequired: true,
 		},
 		"weight": {
@@ -33,6 +36,7 @@ var AffinitySchema = &schema.BodySchema{
 			DefaultValue: &schema.DefaultValue{
 				Value: cty.NumberIntVal(50),
 			},
+			Constraint: &schema.LiteralType{Type: cty.Number},
 		},
 	},
 }

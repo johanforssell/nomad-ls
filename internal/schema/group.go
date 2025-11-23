@@ -56,6 +56,7 @@ var GroupSchema = &schema.BodySchema{
 		// TODO: there is no way to make the label optional so it had to be removed
 		"network": {
 			Description: lang.PlainText("Specifies the network requirements and configuration, including static and dynamic port allocations, for the group."),
+			Body:        NetworkSchema,
 		},
 		"reschedule": {
 			Description: lang.PlainText("Allows to specify a rescheduling strategy. Nomad will then attempt to schedule the task on another node if any of the group allocation statuses become \"failed\"."),
@@ -76,6 +77,7 @@ var GroupSchema = &schema.BodySchema{
 					Name: "name",
 				},
 			},
+			Body: TaskSchema,
 		},
 		"update": {
 			Description: lang.PlainText("Specifies the task's update strategy. When omitted, a default update strategy is applied."),
@@ -87,6 +89,11 @@ var GroupSchema = &schema.BodySchema{
 		"volume": {
 			Description: lang.PlainText("Specifies the volumes that are required by tasks within the group."),
 			Body:        VolumeSchema,
+			Labels: []*schema.LabelSchema{
+				{
+					Name: "name",
+				},
+			},
 		},
 	},
 }

@@ -13,12 +13,14 @@ var SpreadSchema = &schema.BodySchema{
 			DefaultValue: &schema.DefaultValue{
 				Value: cty.StringVal(""),
 			},
+			Constraint: &schema.LiteralType{Type: cty.String},
 		},
 		"weight": {
 			Description: lang.PlainText("Specifies a weight for the spread block. The weight is used during scoring and must be an integer between 0 to 100. Weights can be used when there is more than one spread or affinity block to express relative preference across them."),
 			DefaultValue: &schema.DefaultValue{
 				Value: cty.NumberIntVal(0),
 			},
+			Constraint: &schema.LiteralType{Type: cty.Number},
 		},
 	},
 	Blocks: map[string]*schema.BlockSchema{
