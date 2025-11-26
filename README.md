@@ -2,7 +2,7 @@
 
 A simple [nomad](https://developer.hashicorp.com/nomad) language server
 
-## Features
+### Features
 
 - Autocomplete
 - Diagnostics
