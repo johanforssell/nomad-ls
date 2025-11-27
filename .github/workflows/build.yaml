@@ -1,0 +1,45 @@
+name: Build
+
+on:
+  push:
+    branches: ["main"]
+    tags: ["v*.*.*"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - { os: linux, arch: amd64 }
+          - { os: linux, arch: arm64 }
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up Go
+        uses: actions/setup-go@v6
+        with:
+          go-version-file: "go.mod"
+
+      - name: Build (${{ matrix.os }}-${{ matrix.arch }})
+        env:
+          GOOS: ${{ matrix.os }}
+          GOARCH: ${{ matrix.arch }}
+        run: go build -v -o ./bin/${{ matrix.os }}_${{ matrix.arch }}/
+
+      - name: Move binaries
+        run: |
+          mkdir -p ./dist/${{ matrix.os }}_${{ matrix.arch }}
+          mv ./bin/${{ matrix.os }}_${{ matrix.arch }}/* ./dist/${{ matrix.os }}_${{ matrix.arch }}/
+
+      - name: Package files
+        run: |
+          mkdir -p ./release
+          tar -czf ./release/nomad-ls_${{ matrix.os }}_${{ matrix.arch }}.tar.gz -C ./dist/${{ matrix.os }}_${{ matrix.arch }} .
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ./release/*
+          draft: true
