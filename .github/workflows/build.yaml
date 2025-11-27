@@ -26,7 +26,7 @@ jobs:
         env:
           GOOS: ${{ matrix.os }}
           GOARCH: ${{ matrix.arch }}
-        run: go build -v -o ./bin/${{ matrix.os }}_${{ matrix.arch }}/
+        run: go build -o ./bin/${{ matrix.os }}_${{ matrix.arch }}/
 
       - name: Move binaries
         run: |
