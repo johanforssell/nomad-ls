@@ -35,10 +35,19 @@ jobs:
           mkdir -p ./temp/${{ matrix.os }}_${{ matrix.arch }}
           mv ./bin/${{ matrix.os }}_${{ matrix.arch }}/* ./temp/${{ matrix.os }}_${{ matrix.arch }}/
 
-      - name: Package files
+      - name: Package files for linux
+        if: ${{ matrix.os == 'linux' }}
         run: |
           mkdir -p ./release
-          tar -czf ./release/nomad-ls_${{ matrix.os }}_${{ matrix.arch }}.tar.gz -C ./temp/${{ matrix.os }}_${{ matrix.arch }} .
+          cd ./temp/${{ matrix.os }}_${{ matrix.arch }}
+          tar -czf ${{ github.workspace }}/release/nomad-ls_${{ matrix.os }}_${{ matrix.arch }}.tar.gz *
+
+      - name: Package files for windows
+        if: ${{ matrix.os == 'windows' }}
+        run: |
+          mkdir -p ./release
+          cd ./temp/${{ matrix.os }}_${{ matrix.arch }}
+          zip -r ${{ github.workspace }}/release/nomad-ls_${{ matrix.os }}_${{ matrix.arch }}.zip *
 
       - name: Release
         uses: softprops/action-gh-release@v2
