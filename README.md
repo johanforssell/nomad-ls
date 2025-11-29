@@ -18,4 +18,4 @@ $ make
 ### Editor Extensions
 
 - Zed (todo)
-- VsCode (todo)
+- VSCode (todo)
