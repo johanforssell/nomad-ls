@@ -17,5 +17,5 @@ $ make
 
 ### Editor Extensions
 
-- Zed (todo)
+- [Zed](https://github.com/loczek/zed-nomad-extension) 
 - VSCode (todo)
