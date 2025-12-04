@@ -156,21 +156,21 @@ func (s *Service) Handle(ctx context.Context, reply jsonrpc2.Replier, req jsonrp
 }
 
 func CollectHoverInfo(body hcl.Body, pos hcl.Pos, schemaMap map[string]*hcl.BodySchema) []string {
-	return []string{dfs(body, schemaMap, pos, schema.SchemaMapBetter["root"], &schema.RootBodySchema)}
+	return []string{CollectHoverInfoDFS(body, schemaMap, "root", pos, &schema.RootBodySchema)}
 }
 
-func dfs(
+func CollectHoverInfoDFS(
 	body hcl.Body,
 	schemaMap map[string]*hcl.BodySchema,
+	schemaKey string,
 	pos hcl.Pos,
-	currSchema *hcl.BodySchema,
 	langSchema *hclschema.BodySchema,
 ) string {
-	if currSchema == nil {
+	if schemaMap[schemaKey] == nil {
 		return ""
 	}
 
-	bodyContent, _ := body.Content(currSchema)
+	bodyContent, _ := body.Content(schemaMap[schemaKey])
 	blocksByType := bodyContent.Blocks.ByType()
 
 	ans := ""
@@ -187,7 +187,7 @@ func dfs(
 			}
 
 			if langSchema.Blocks[k] != nil && langSchema.Blocks[k].Body != nil {
-				ans = dfs(b.Body, schemaMap, pos, schemaMap[k], langSchema.Blocks[k].Body)
+				ans = CollectHoverInfoDFS(b.Body, schemaMap, k, pos, langSchema.Blocks[k].Body)
 			}
 		}
 	}
@@ -204,17 +204,24 @@ func dfs(
 func CollectCompletions(body hcl.Body, pos hcl.Pos, schemaMap map[string]*hcl.BodySchema) []protocol.CompletionItem {
 	var blocks []protocol.CompletionItem
 
-	dfs2(body, &blocks, schemaMap, pos, schema.SchemaMapBetter["root"], &schema.RootBodySchema)
+	CollectCompletionsDFS(body, &blocks, schemaMap, "root", pos, &schema.RootBodySchema)
 
 	return blocks
 }
 
-func dfs2(body hcl.Body, blocks *[]protocol.CompletionItem, schemaMap map[string]*hcl.BodySchema, pos hcl.Pos, currSchema *hcl.BodySchema, langSchema *hclschema.BodySchema) {
-	if currSchema == nil {
+func CollectCompletionsDFS(
+	body hcl.Body,
+	blocks *[]protocol.CompletionItem,
+	schemaMap map[string]*hcl.BodySchema,
+	schemaKey string,
+	pos hcl.Pos,
+	langSchema *hclschema.BodySchema,
+) {
+	if schemaMap[schemaKey] == nil {
 		return
 	}
 
-	bodyContent, _ := body.Content(currSchema)
+	bodyContent, _ := body.Content(schemaMap[schemaKey])
 	blocksByType := bodyContent.Blocks.ByType()
 
 	var matchingBlocks uint
@@ -229,7 +236,7 @@ func dfs2(body hcl.Body, blocks *[]protocol.CompletionItem, schemaMap map[string
 			matchingBlocks += 1
 
 			if langSchema.Blocks[k] != nil && langSchema.Blocks[k].Body != nil {
-				dfs2(b.Body, blocks, schemaMap, pos, schemaMap[k], langSchema.Blocks[k].Body)
+				CollectCompletionsDFS(b.Body, blocks, schemaMap, k, pos, langSchema.Blocks[k].Body)
 			}
 		}
 	}
@@ -355,12 +362,12 @@ func CalculateByteOffset(pos protocol.Position, src []byte) uint {
 func CollectDiagnistics(body hcl.Body, schemaMap map[string]*hcl.BodySchema) *hcl.Diagnostics {
 	var diags hcl.Diagnostics
 
-	diags = diags.Extend(dfs3(body, &diags, schemaMap, schema.SchemaMapBetter["root"], &schema.RootBodySchema))
+	diags = diags.Extend(CollectDiagnisticsDFS(body, &diags, schemaMap, schema.SchemaMapBetter["root"], &schema.RootBodySchema))
 
 	return &diags
 }
 
-func dfs3(body hcl.Body, diags *hcl.Diagnostics, schemaMap map[string]*hcl.BodySchema, currSchema *hcl.BodySchema, langSchema *hclschema.BodySchema) hcl.Diagnostics {
+func CollectDiagnisticsDFS(body hcl.Body, diags *hcl.Diagnostics, schemaMap map[string]*hcl.BodySchema, currSchema *hcl.BodySchema, langSchema *hclschema.BodySchema) hcl.Diagnostics {
 	if currSchema == nil {
 		return make(hcl.Diagnostics, 0)
 	}
@@ -371,7 +378,7 @@ func dfs3(body hcl.Body, diags *hcl.Diagnostics, schemaMap map[string]*hcl.BodyS
 	for k, v := range blocksByType {
 		for _, b := range v {
 			if langSchema.Blocks[k] != nil && langSchema.Blocks[k].Body != nil {
-				allDiags = allDiags.Extend(dfs3(b.Body, diags, schemaMap, schemaMap[k], langSchema.Blocks[k].Body))
+				allDiags = allDiags.Extend(CollectDiagnisticsDFS(b.Body, diags, schemaMap, schemaMap[k], langSchema.Blocks[k].Body))
 			} else if langSchema.Blocks[k] != nil && langSchema.Blocks[k].DependentBody != nil {
 				log.Printf("found config!")
 				if bodyContent.Attributes["driver"] != nil {
@@ -383,9 +390,8 @@ func dfs3(body hcl.Body, diags *hcl.Diagnostics, schemaMap map[string]*hcl.BodyS
 
 					log.Printf("map key: %s", schemaMapDependentKey)
 
-					// log.Printf("driver: %+v", bodyContent.Attributes["xd"].)
 					// langSchema.Blocks[k].DependentBody[hclschema.SchemaKey(bodyContent.Attributes["driver"].Name)]
-					allDiags = allDiags.Extend(dfs3(b.Body, diags, schemaMap, schemaMap[schemaMapDependentKey], langSchema.Blocks[k].DependentBody[hclschema.SchemaKey(driver.AsString())]))
+					allDiags = allDiags.Extend(CollectDiagnisticsDFS(b.Body, diags, schemaMap, schemaMap[schemaMapDependentKey], langSchema.Blocks[k].DependentBody[hclschema.SchemaKey(driver.AsString())]))
 				}
 			}
 		}
