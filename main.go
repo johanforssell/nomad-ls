@@ -34,12 +34,12 @@ func main() {
 
 			resp, err := lsp.Handle(ctx, reply, req)
 
-			logger.Info("response: %#v", resp)
+			logger.Info("response", "data", resp)
 
 			reply(ctx, resp, err)
 
 			if err != nil {
-				logger.Info("recieved error from handler: %s", err.Error())
+				logger.Info("received error from handler", "error", err.Error())
 			}
 		}()
 		return nil
