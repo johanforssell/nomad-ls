@@ -22,6 +22,8 @@ var SchemaMapBetter map[string]*hcl.BodySchema = map[string]*hcl.BodySchema{
 	"constraint":       ConstraintSchema.Copy().ToHCLSchema(),
 	"consul":           ConsulSchema.Copy().ToHCLSchema(),
 	"csi_plugin":       CsiPluginSchema.Copy().ToHCLSchema(),
+	"device":           DeviceSchema.Copy().ToHCLSchema(),
+	"disconnect":       DisconnectSchema.Copy().ToHCLSchema(),
 	"dispatch_payload": DispatchPayloadSchema.Copy().ToHCLSchema(),
 	"dns":              DnsSchema.Copy().ToHCLSchema(),
 	"ephemeral_disk":   EphemeralDiskSchema.Copy().ToHCLSchema(),

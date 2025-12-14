@@ -44,6 +44,7 @@ var GroupSchema = &schema.BodySchema{
 		},
 		"disconnect": {
 			Description: lang.PlainText("Specifies the disconnect strategy for the server and client for all tasks in this group in case of a network partition. The tasks can be left unconnected, stopped or replaced when the client disconnects. The policy for reconciliation in case the client regains connectivity is also specified here."),
+			Body:        DisconnectSchema,
 		},
 		"meta": {
 			Description: lang.PlainText("Specifies a key-value map that annotates the group with user-defined metadata."),
