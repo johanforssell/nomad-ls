@@ -10,7 +10,7 @@ var SecretSchema = &schema.BodySchema{
 	Attributes: map[string]*schema.AttributeSchema{
 		"provider": {
 			Description:  lang.Markdown("Specifies the underlying implementation to use in order for Nomad to interact with a specific secret store."),
-			DefaultValue: schema.DefaultValue{Value: cty.StringVal("")},
+			DefaultValue: &schema.DefaultValue{Value: cty.StringVal("")},
 			Constraint:   &schema.LiteralType{Type: cty.String},
 			IsOptional:   true,
 		},
