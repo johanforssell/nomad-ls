@@ -3,12 +3,14 @@ package lsp
 import (
 	"fmt"
 	"log"
+	"strconv"
 
 	hclschema "github.com/hashicorp/hcl-lang/schema"
 	"github.com/hashicorp/hcl/v2"
 	"github.com/hashicorp/hcl/v2/hclsyntax"
 	"github.com/loczek/nomad-ls/internal/schema"
 	"github.com/zclconf/go-cty/cty"
+	"github.com/zclconf/go-cty/cty/convert"
 	"go.lsp.dev/protocol"
 )
 
@@ -90,7 +92,7 @@ func CollectCompletionsDFS(
 				continue
 			}
 
-			h, ok := v.Constraint.(*hclschema.LiteralType)
+			c, ok := v.Constraint.(*hclschema.LiteralType)
 			if !ok {
 				continue
 			}
@@ -102,45 +104,71 @@ func CollectCompletionsDFS(
 				continue
 			}
 
-			switch h.Type {
-			case cty.String:
-				blocksByTypeArr = append(blocksByTypeArr, protocol.CompletionItem{
-					Label:      k,
-					InsertText: fmt.Sprintf("%s = \"$0\"", k),
-					Kind:       protocol.CompletionItemKindVariable,
-					Documentation: protocol.MarkupContent{
-						Kind:  protocol.Markdown,
-						Value: v.Description.Value,
-					},
-					InsertTextFormat: protocol.InsertTextFormatSnippet,
-				})
-			case cty.List(cty.String):
-				blocksByTypeArr = append(blocksByTypeArr, protocol.CompletionItem{
-					Label:      k,
-					InsertText: fmt.Sprintf("%s = [\"$0\"]", k),
-					Kind:       protocol.CompletionItemKindVariable,
-					Documentation: protocol.MarkupContent{
-						Kind:  protocol.Markdown,
-						Value: v.Description.Value,
-					},
-					InsertTextFormat: protocol.InsertTextFormatSnippet,
-				})
-			default:
-				blocksByTypeArr = append(blocksByTypeArr, protocol.CompletionItem{
-					Label:      k,
-					InsertText: fmt.Sprintf("%s = ", k),
-					Kind:       protocol.CompletionItemKindVariable,
-					Documentation: protocol.MarkupContent{
-						Kind:  protocol.Markdown,
-						Value: v.Description.Value,
-					},
-					InsertTextFormat: protocol.InsertTextFormatSnippet,
-				})
+			var insertText string
+
+			d, ok := v.DefaultValue.(*hclschema.DefaultValue)
+			if !ok {
+				continue
 			}
+
+			switch c.Type {
+			case cty.String:
+				insertText = fmt.Sprintf("%s = \"${0:%s}\"", k, d.Value.AsString())
+			case cty.Number:
+				val, err := convert.Convert(d.Value, cty.String)
+
+				if err != nil {
+					continue
+				}
+
+				insertText = fmt.Sprintf("%s = ${0:%s}", k, val.AsString())
+			case cty.Bool:
+				insertText = fmt.Sprintf("%s = ${0:%s}", k, strconv.FormatBool(d.Value.True()))
+			case cty.List(cty.String):
+				var arr []string
+
+				for _, b := range d.Value.Elements() {
+					arr = append(arr, b.AsString())
+				}
+
+				insertText = fmt.Sprintf("%s = [\"${0:%s}\"]", k, arr)
+			case cty.Map(cty.String):
+				var arr = make(map[string]string)
+
+				for a, b := range d.Value.Elements() {
+					arr[a.AsString()] = b.AsString()
+				}
+
+				insertText = fmt.Sprintf("%s = {${0:%s}}", k, formatMap(arr))
+			default:
+				insertText = fmt.Sprintf("%s = ", k)
+			}
+
+			blocksByTypeArr = append(blocksByTypeArr, protocol.CompletionItem{
+				Label:      k,
+				Kind:       protocol.CompletionItemKindVariable,
+				InsertText: insertText,
+				Detail:     c.FriendlyName(),
+				Documentation: protocol.MarkupContent{
+					Kind:  protocol.Markdown,
+					Value: v.Description.Value,
+				},
+				InsertTextFormat: protocol.InsertTextFormatSnippet,
+			})
 		}
 
 		*blocks = append(*blocks, blocksByTypeArr...)
 	}
 
 	log.Printf("matching blocks: %d", matchingBlocks)
+}
+
+func formatMap(input map[string]string) string {
+	ans := "\n"
+
+	for k, v := range input {
+		ans += fmt.Sprintf("\"%s\": \"%s\"\n", k, v)
+	}
+
+	return ans
 }
