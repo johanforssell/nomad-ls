@@ -66,21 +66,22 @@ func CollectCompletionsDFS(
 
 		for k, v := range langSchema.Blocks {
 			var text string
-			var detail string
 
 			if len(v.Labels) != 0 {
 				text = asBlock(k, depth)
-				detail = "named"
 			} else {
 				text = asAnonymousBlock(k, depth)
 			}
 
 			blocksByTypeArr = append(blocksByTypeArr, protocol.CompletionItem{
-				Label:            k,
-				InsertText:       text,
-				Kind:             protocol.CompletionItemKindInterface,
+				Label:      k,
+				Kind:       protocol.CompletionItemKindInterface,
+				InsertText: text,
+				Documentation: protocol.MarkupContent{
+					Kind:  protocol.Markdown,
+					Value: v.Description.Value,
+				},
 				InsertTextFormat: protocol.InsertTextFormatSnippet,
-				Detail:           detail,
 			})
 		}
 
