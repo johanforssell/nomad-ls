@@ -26,13 +26,13 @@ func main() {
 	stream := jsonrpc2.NewStream(&rwc{os.Stdin, os.Stdout})
 	con := jsonrpc2.NewConn(stream)
 
-	lsp := lsp.New(con, *logger)
+	service := lsp.New(con, *logger)
 
 	con.Go(context.Background(), func(ctx context.Context, reply jsonrpc2.Replier, req jsonrpc2.Request) error {
 		go func() {
 			logger.Info(fmt.Sprintf("recieved method: %s", req.Method()))
 
-			resp, err := lsp.Handle(ctx, reply, req)
+			resp, err := service.Handle(ctx, reply, req)
 
 			logger.Info("response", "data", resp)
 
