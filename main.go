@@ -6,6 +6,7 @@ import (
 	"io"
 	"log/slog"
 	"os"
+	"runtime/debug"
 	"strings"
 
 	"github.com/lmittmann/tint"
@@ -26,26 +27,26 @@ func main() {
 	stream := jsonrpc2.NewStream(&rwc{os.Stdin, os.Stdout})
 	con := jsonrpc2.NewConn(stream)
 
-	lsp := lsp.New(con, *logger)
+	service := lsp.New(con, *logger)
 
 	con.Go(context.Background(), func(ctx context.Context, reply jsonrpc2.Replier, req jsonrpc2.Request) error {
 		go func() {
 			logger.Info(fmt.Sprintf("recieved method: %s", req.Method()))
 
-			resp, err := lsp.Handle(ctx, reply, req)
+			resp, err := service.Handle(ctx, reply, req)
 
-			logger.Info("response: %#v", resp)
+			logger.Info("response", "data", resp)
 
 			reply(ctx, resp, err)
 
 			if err != nil {
-				logger.Info("recieved error from handler: %s", err.Error())
+				logger.Info("received error from handler", "error", err.Error())
 			}
 		}()
 		return nil
 	})
 
-	logger.Info("starting")
+	logger.Info("starting", "build", BuildInfo())
 
 	<-con.Done()
 
@@ -77,4 +78,19 @@ func isBuilt() bool {
 	}
 
 	return true
+}
+
+func BuildInfo() string {
+	info, ok := debug.ReadBuildInfo()
+	if !ok {
+		return "unknown"
+	}
+	var rev string
+	for _, s := range info.Settings {
+		if s.Key == "vcs.revision" {
+			rev = s.Value[:min(7, len(rev))]
+			break
+		}
+	}
+	return fmt.Sprintf("%s-%s", info.Main.Version, rev)
 }
