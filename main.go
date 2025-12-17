@@ -23,6 +23,7 @@ func main() {
 	}
 
 	logger := slog.New(handler)
+	slog.SetDefault(logger)
 
 	stream := jsonrpc2.NewStream(&rwc{os.Stdin, os.Stdout})
 	con := jsonrpc2.NewConn(stream)
