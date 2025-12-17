@@ -121,5 +121,5 @@ var JobSchema = &schema.BodySchema{
 			Body:        SecretSchema,
 		},
 	},
-	Description: lang.PlainText("job schema docs"),
+	Description: lang.Markdown("The `job` block is the top-most configuration option in the job specification. A job is a declarative specification of tasks that Nomad should run. Jobs have one or more task groups, which are themselves collections of one or more tasks. Job names are unique per [region](https://nomad/docs/deploy/clusters/federate-regions) or [namespace](https://developer.hashicorp.com/nomad/docs/govern/namespaces)."),
 }

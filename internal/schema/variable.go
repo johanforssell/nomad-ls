@@ -8,6 +8,7 @@ import (
 
 // TODO: update docs and constraints
 var VariableSchema = &schema.BodySchema{
+	Description: lang.Markdown("Input variables serve as parameters for a Nomad job, allowing aspects of the job to be customized without altering the job's own source code.\nWhen you declare variables in the same file as the job specification, you can set their values using CLI options and environment variables."),
 	Attributes: map[string]*schema.AttributeSchema{
 		"type": {
 			Description: lang.Markdown("The type of HCL variable: `string`, `number`, `bool`."),

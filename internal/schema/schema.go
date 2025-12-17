@@ -1,7 +1,6 @@
 package schema
 
 import (
-	"github.com/hashicorp/hcl-lang/lang"
 	"github.com/hashicorp/hcl-lang/schema"
 	"github.com/hashicorp/hcl/v2"
 	"github.com/loczek/nomad-ls/internal/schema/drivers"
@@ -75,7 +74,7 @@ var SchemaMap map[string]*hcl.BodySchema = map[string]*hcl.BodySchema{
 var RootBodySchema = schema.BodySchema{
 	Blocks: map[string]*schema.BlockSchema{
 		"variable": {
-			Description: lang.Markdown("## h2\nvariable docs"),
+			Description: VariableSchema.Description,
 			Labels: []*schema.LabelSchema{
 				{Name: "name"},
 			},
@@ -86,7 +85,7 @@ var RootBodySchema = schema.BodySchema{
 			Body:        VariablesSchema,
 		},
 		"job": {
-			Description: lang.Markdown("## h2\njob docs"),
+			Description: JobSchema.Description,
 			Labels: []*schema.LabelSchema{
 				{Name: "name"},
 			},
