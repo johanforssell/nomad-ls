@@ -47,7 +47,7 @@ var ResourcesSchema = &schema.BodySchema{
 	// TODO: add numa block
 	Blocks: map[string]*schema.BlockSchema{
 		"device": {
-			Description: lang.Markdown("test"),
+			Description: lang.Markdown("Specifies the device requirements. This may be repeated to request multiple device types."),
 			Labels: []*schema.LabelSchema{
 				{Name: "name"},
 			},
