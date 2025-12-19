@@ -27,7 +27,7 @@ func (p *Parser) ParseHCL(src []byte, filename string) (*hcl.File, hcl.Diagnosti
 	// 	return existing, nil
 	// }
 
-	file, diags := hclsyntax.ParseConfig(src, filename, hcl.Pos{Byte: 0, Line: 1, Column: 1})
+	file, diags := hclsyntax.ParseConfig(src, filename, hcl.InitialPos)
 	p.files[filename] = file
 	return file, diags
 }
@@ -36,7 +36,7 @@ func (p *Parser) UpdateHCL(src []byte, filename string) (*hcl.File, hcl.Diagnost
 	p.mu.Lock()
 	defer p.mu.Unlock()
 
-	file, diags := hclsyntax.ParseConfig(src, filename, hcl.Pos{Byte: 0, Line: 1, Column: 1})
+	file, diags := hclsyntax.ParseConfig(src, filename, hcl.InitialPos)
 	p.files[filename] = file
 	return file, diags
 }
