@@ -1,6 +1,6 @@
-## Overview
+# Nomad Language Server
 
-A simple [nomad](https://developer.hashicorp.com/nomad) language server
+A simple language server for [nomad](https://developer.hashicorp.com/nomad).
 
 ### Features
 
@@ -18,10 +18,10 @@ $ make
 
 ### Editor Extensions
 
-- [Zed](https://github.com/loczek/zed-nomad-extension) 
+- [Zed](https://github.com/loczek/zed-nomad-extension)
 - VSCode (todo)
 
-### Updating the language server while using it for the Zed Nomad Extension
+### Development setup with Zed
 
 If you are already using the [Zed Nomad Extension](https://github.com/loczek/zed-nomad-extension) and want your changes in this repo to be reflected, please
 
