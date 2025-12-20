@@ -146,6 +146,15 @@ func (s *Service) Handle(ctx context.Context, reply jsonrpc2.Replier, req jsonrp
 		}
 
 		return nil, s.HandleTextDocumentDidClose(ctx, &params)
+	case protocol.MethodTextDocumentFormatting:
+		params := protocol.DocumentFormattingParams{}
+
+		err := json.Unmarshal(req.Params(), &params)
+		if err != nil {
+			return nil, err
+		}
+
+		return s.HandleTextDocumentFormatting(ctx, &params)
 	case protocol.MethodShutdown:
 		ctx.Done()
 		return nil, nil

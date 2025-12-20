@@ -6,6 +6,7 @@ A simple [nomad](https://developer.hashicorp.com/nomad) language server
 
 - Autocomplete
 - Diagnostics
+- Formatting
 - Hover information
 - Driver support (docker, exec, raw_exec, qemu, java)
 

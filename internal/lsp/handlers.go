@@ -1,11 +1,13 @@
 package lsp
 
 import (
+	"bytes"
 	"context"
 	"errors"
 	"fmt"
 
 	"github.com/hashicorp/hcl/v2"
+	"github.com/hashicorp/hcl/v2/hclwrite"
 	"go.lsp.dev/protocol"
 )
 
@@ -21,6 +23,7 @@ func (s *Service) HandleInitialize(ctx context.Context, params *protocol.Initial
 			TextDocumentSync: &protocol.TextDocumentSyncOptions{
 				Change: protocol.TextDocumentSyncKindFull,
 			},
+			DocumentFormattingProvider: &protocol.DocumentFormattingOptions{},
 		},
 	}, nil
 }
@@ -125,4 +128,51 @@ func (s *Service) HandleTextDocumentDidClose(ctx context.Context, params *protoc
 	s.logger.Info(fmt.Sprintf("%+v", params))
 
 	return nil
+}
+
+func (s *Service) HandleTextDocumentFormatting(ctx context.Context, params *protocol.DocumentFormattingParams) ([]protocol.TextEdit, error) {
+	filename := params.TextDocument.URI.Filename()
+
+	var edits []protocol.TextEdit
+
+	if file, ok := s.parser.Files()[filename]; ok {
+		outBytes := hclwrite.Format(file.Bytes)
+
+		if !bytes.Equal(file.Bytes, outBytes) {
+			startPos := protocol.Position{Line: 0, Character: 0}
+			endPos := getLastPostionFromBytes(file.Bytes)
+
+			edits = append(edits, protocol.TextEdit{
+				Range: protocol.Range{
+					Start: startPos,
+					End:   endPos,
+				},
+				NewText: string(outBytes),
+			})
+		}
+	}
+
+	return edits, nil
+}
+
+func getLastPostionFromBytes(src []byte) protocol.Position {
+	runes := []rune(string(src))
+
+	var runeIndex uint
+	var line uint
+	var character uint
+
+	for runeIndex < uint(len(runes)) {
+		character += 1
+		if runes[runeIndex] == '\n' {
+			line += 1
+			character = 0
+		}
+		runeIndex += 1
+	}
+
+	return protocol.Position{
+		Line:      uint32(line),
+		Character: uint32(character),
+	}
 }
