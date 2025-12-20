@@ -26,6 +26,7 @@ var ConnectSchema = &schema.BodySchema{
 		},
 		"gateway": {
 			Description: lang.PlainText("This is used to configure the gateway service created by Nomad for Consul service mesh."),
+			Body:        GatewaySchema,
 		},
 	},
 }
