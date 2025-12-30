@@ -320,7 +320,8 @@ var DockerDriverSchema = &schema.BodySchema{
 					Constraint:  &schema.LiteralType{Type: cty.String},
 					IsOptional:  true,
 				},
-    },
+			},
+		},
 		"mount": {
 			Description: lang.Markdown("Specify a [mount](https://docs.docker.com/engine/reference/commandline/service_create/#add-bind-mounts-volumes-or-memory-filesystems) to be mounted into the container. Volume, bind, and tmpfs type mounts are supported. May be specified multiple times."),
 			Body:        MountSchema,
